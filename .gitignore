@@ -1,0 +1,39 @@
+
+# Ignore bundler config.
+/.bundle
+/vendor/bundle
+
+# Ignore the default SQLite database.
+/db/*.sqlite3
+/db/*.sqlite3-journal
+/db/test
+db/test
+
+# Ignore all logfiles and tempfiles.
+/log/*
+/tmp/cache/*
+/tmp/miniprofiler/*
+/tmp/log/*
+/tmp/pids/puma*
+
+!/log/.keep
+!/tmp/.keep
+
+# Ignore Byebug command history file.
+.byebug_history
+
+#Ignore environment varibales
+.git
+.dockerignore
+.docker-compose.override.yml
+.env.production
+.env.development
+.env.production.local
+.env
+.cache
+
+public/assets
+coverage
+core
+.vscode/
+*.swp

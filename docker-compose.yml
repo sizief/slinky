@@ -1,0 +1,32 @@
+version: '2.1'
+services:
+  db:
+    image: postgres:9.4.5
+    #   volumes:
+    #  - slinky-db:/var/lib/postgresql/data 
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=slinkyusr
+      - POSTGRES_PASSWORD=slinkyusr
+      - POSTGRES_DB=slinky
+    healthcheck:
+        test: ["CMD-SHELL", "psql -h localhost -p 5432 -U postgres -v ON_ERROR_STOP=1 -c 'select version()' &> /dev/null"]
+        test: ["CMD-SHELL", "pg_isready -U postgres"] #Are you really up?
+        interval: 2s
+        timeout: 30s
+        retries: 15
+        
+  app:
+    build: .
+    links:
+      - db:db
+    ports:
+      - "3000:4567" 
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - .:/var/www/slinky
+    tty: true
+    stdin_open: true

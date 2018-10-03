@@ -1,0 +1,29 @@
+development:
+  host: db #localhost
+  port: 5432
+  adapter: postgresql
+  encoding: unicode
+  database: slinky
+  pool: 5
+  username: slinkyusr
+  password: slinkyusr
+
+test:
+  host: db #localhost
+  port: 5432
+  adapter: postgresql
+  encoding: unicode
+  database: slinky
+  pool: 5
+  username: slinkyusr 
+  password: slinkyusr
+
+production:
+  host: db #localhost
+  port: 5432
+  adapter: postgresql
+  encoding: unicode
+  database: slinky
+  pool: 5
+  username: slinkyusr 
+  password: slinkyusr
