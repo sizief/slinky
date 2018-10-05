@@ -11,4 +11,7 @@ module RSpecMixin
   def app() Sinatra::Application end
 end
 
-RSpec.configure { |c| c.include RSpecMixin }
+RSpec.configure do |c|
+  c.include RSpecMixin
+  c.before(:example){@random_shortcode = [*'0'..'9', *'a'..'z','A'..'Z',"_"].sample(6).join.to_s}
+end
