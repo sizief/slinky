@@ -69,8 +69,8 @@ helpers do
   def stats_response_for url
     response = Hash.new
     count = url.stats.count
-    response[:lastSeenDate] = url.stats.last.created_at.iso8601(3) unless count == 0
     response[:startDate] = url.created_at.iso8601(3)
+    response[:lastSeenDate] = url.stats.last.created_at.iso8601(3) unless count == 0
     response[:redirectCoun] = count
     response.to_json
   end
@@ -78,11 +78,15 @@ helpers do
   def json_params
     begin
       response = JSON.parse(request.body.read)
-      raise if response["url"].nil? 
+      raise if response["url"].nil? || !is_valid(response)
       response
     rescue
         halt 400, {message: 'Invalid JSON'}.to_json
     end
+  end
+
+  def is_valid response
+    /^([!#$&-;=?-_a-z~\[\]]|%[0-9a-fA-F]{2})+$/.match(response.values.join)
   end
 end
 

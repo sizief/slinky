@@ -121,3 +121,24 @@ describe "GET to receive stats" do
     end
   end 
 end
+
+describe "Send illegal charcter in url" do
+  context "for POST inside url param" do
+    let(:invalid_url){{url: "alideishidi.com<>"}}
+    let(:response) { post "/shorten", invalid_url.to_json, "CONTENT_TYPE" => "application/json" }
+  
+    it "return status code 400" do
+      expect(response.status).to eq 400
+    end
+  end
+  
+  context "for POST inside shortcode" do
+    let(:invalid_url){{url: "alideishidi.com", shortcode: "asdf<>"}}
+    let(:response) { post "/shorten", invalid_url.to_json, "CONTENT_TYPE" => "application/json" }
+  
+    it "return status code 400" do
+      expect(response.status).to eq 400
+    end
+  end
+  
+end
