@@ -2,7 +2,7 @@ require 'sinatra'
 require 'sinatra/activerecord'
 require "sinatra/reloader" if development?
 require './models/url'
-#require 'sinatra/activerecord/rake'
+require './models/stat'
 
 #set :environment, :test
 #set :RACK_ENV, :production
@@ -36,6 +36,25 @@ post '/shorten' do
   end
 end
 
+get '/*/stats' do
+  url = Url.find_by(shortcode: params['splat'])
+  if url.nil?
+      halt 404, {message: 'shortcode is not exists'}.to_json
+  else
+    stats_response_for url
+  end
+end
+
+get '/*' do
+  url = Url.find_by(shortcode: params['splat'])
+  if url.nil?
+      halt 404, {message: 'The shortcode cannot be found in the system :-)'}.to_json
+  else
+    url.stats.create
+    redirect to("#{url.url}"), 301
+  end
+end
+
 helpers do
   def status_of url
     if url.errors.messages.empty?
@@ -47,9 +66,14 @@ helpers do
     end
   end
 
-  #def base_url
-  #  @base_url ||= "#{request.env['rack.url_scheme']}://{request.env['HTTP_HOST']}"
-  #end
+  def stats_response_for url
+    response = Hash.new
+    count = url.stats.count
+    response[:lastSeenDate] = url.stats.last.created_at.iso8601(3) unless count == 0
+    response[:startDate] = url.created_at.iso8601(3)
+    response[:redirectCoun] = count
+    response.to_json
+  end
 
   def json_params
     begin
@@ -57,7 +81,7 @@ helpers do
       raise if response["url"].nil? 
       response
     rescue
-      halt 400, { message:'Invalid JSON' }.to_json
+        halt 400, {message: 'Invalid JSON'}.to_json
     end
   end
 end
