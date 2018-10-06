@@ -29,6 +29,6 @@ services:
     volumes:
       - .:/var/www/slinky
     environment:
-      ENTRYPOINT: app
+      ENTRYPOINT: test
     tty: true
     stdin_open: true

@@ -1,4 +1,11 @@
 #!/usr/bin/env bash
 
-bundle exec rake db:migrate
-bundle exec ruby app.rb
+if [ "$ENTRYPOINT" = "app" ]
+then
+  bundle exec rake db:migrate
+  bundle exec ruby app.rb
+elif [ "$ENTRYPOINT" = "test" ]
+then
+  bundle exec rake db:migrate
+  bundle exec rspec spec
+fi
