@@ -10,12 +10,21 @@ end
 
 describe "POST to shorten" do
    
-  context "with proper parameters" do
+  context "with all parameters available" do
     let(:data){{shortcode: @random_shortcode, url: "http://alideishidi.com"}}
     let(:response) { post "/shorten", data.to_json, "CONTENT_TYPE" => "application/json" }
     
     it "return status code 201" do
-      expect(response.status).to eq 201
+      expect(response.status).to eq(201), "failed with #{data}"
+    end
+  end
+
+  context "with url only available" do
+    let(:data){{url: "http://alideishidi.com"}}
+    let(:response) { post "/shorten", data.to_json, "CONTENT_TYPE" => "application/json" }
+    
+    it "return status code 201" do
+      expect(response.status).to eq(201), "failed with #{data}"
     end
   end
 
@@ -40,7 +49,11 @@ describe "POST to shorten" do
     let(:data){{shortcode: "abcdex",url: "http://example.com"}}
     let(:first_response) { post "/shorten", data.to_json, "CONTENT_TYPE" => "application/json" }
     let(:second_response) { post "/shorten", data.to_json, "CONTENT_TYPE" => "application/json" }
-
+  
+#    it "return 201 for first request" do
+#      expect(first_response.status).to eq(201), "failed with #{data}"
+#    end
+ 
     it "return 409 for second request" do
       expect(second_response.status).to eq 409
     end

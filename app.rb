@@ -27,10 +27,10 @@ post '/shorten' do
       {shortcode: url.shortcode}.to_json
     when 409
       status 409
-      {message: "value already taken"}.to_json
+      {message: "shortcode already taken, try again without sending shortcode, we will pick one for you :-)"}.to_json
     when 422
       status 422
-      {message: "The shortcode contains something else than A-Z or 0-9 and underline, Or it may shorter than six character."}.to_json
+      {message: "The shortcode should contains only A-Z or 0-9 and underline, and it should be six characters."}.to_json
     else
       status 404  
   end
@@ -47,9 +47,9 @@ helpers do
     end
   end
 
-  def base_url
-    @base_url ||= "#{request.env['rack.url_scheme']}://{request.env['HTTP_HOST']}"
-  end
+  #def base_url
+  #  @base_url ||= "#{request.env['rack.url_scheme']}://{request.env['HTTP_HOST']}"
+  #end
 
   def json_params
     begin

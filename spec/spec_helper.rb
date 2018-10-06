@@ -1,6 +1,7 @@
 require 'rack/test'
 #require 'rspec'
 require_relative '../app'
+require_relative '../models/url.rb'
 
 ENV['RACK_ENV'] = 'test'
 
@@ -13,5 +14,5 @@ end
 
 RSpec.configure do |c|
   c.include RSpecMixin
-  c.before(:example){@random_shortcode = [*'0'..'9', *'a'..'z','A'..'Z',"_"].sample(6).join.to_s}
+  c.before(:example){@random_shortcode = Url.create_shortcode}
 end
