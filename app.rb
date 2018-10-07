@@ -37,7 +37,7 @@ post '/shorten' do
 end
 
 get '/*/stats' do
-  url = Url.find_by(shortcode: params['splat'])
+  url = Url.find_by(shortcode: query_param(params['splat']))
   if url.nil?
       halt 404, {message: 'shortcode is not exists'}.to_json
   else
@@ -46,9 +46,10 @@ get '/*/stats' do
 end
 
 get '/*' do
-  url = Url.find_by(shortcode: params['splat'])
+  param = query_param(params['splat'])
+  url = Url.find_by(shortcode: param)
   if url.nil?
-      halt 404, {message: 'The shortcode cannot be found in the system :-)'}.to_json
+    halt 404, {message: "#{param}:  The shortcode cannot be found in the system :-)"}.to_json
   else
     url.stats.create
     redirect to("#{url.url}"), 301
@@ -78,15 +79,24 @@ helpers do
   def json_params
     begin
       response = JSON.parse(request.body.read)
-      raise if response["url"].nil?  || !contains_legal_chars(response)  || !valid_url?(response)
+      raise if response["url"].nil?  || !contains_legal_chars(response.values.join)  || !valid_url?(response)
       response
     rescue
         halt 400, {message: 'Invalid JSON'}.to_json
     end
   end
 
+  def query_param param
+    begin
+      raise if !contains_legal_chars(param[0])
+      param[0]
+    rescue
+        halt 400, {message: "#{param[0]} in url is not valid"}.to_json
+    end
+  end
+
   def contains_legal_chars response
-    /^([!#$&-;=?-_a-z~\[\]]|%[0-9a-fA-F]{2})+$/.match(response.values.join)
+    /^([!#$&-;=?-_a-z~\[\]]|%[0-9a-fA-F]{2})+$/.match(response)
   end
 
   def valid_url? response

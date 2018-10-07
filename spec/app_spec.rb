@@ -152,4 +152,5 @@ describe "Send not url format" do
       expect(response.status).to eq 400
     end
   end
-end 
+end
+
