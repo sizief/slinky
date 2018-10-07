@@ -79,7 +79,7 @@ end
 
 describe "GET to receive url" do
   before do
-    @get_url = Url.create(url: "alideishidi.com")
+    @get_url = Url.create(url: "http://alideishidi.com")
   end
   
   context "shortcode is exists" do
@@ -142,3 +142,14 @@ describe "Send illegal charcter in url" do
   end
   
 end
+
+describe "Send not url format" do
+  context "for POST" do
+    let(:invalid_url){{url: "alideishidi.com"}}
+    let(:response) { post "/shorten", invalid_url.to_json, "CONTENT_TYPE" => "application/json" }
+  
+    it "return status code 400" do
+      expect(response.status).to eq 400
+    end
+  end
+end 

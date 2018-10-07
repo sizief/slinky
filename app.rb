@@ -78,15 +78,25 @@ helpers do
   def json_params
     begin
       response = JSON.parse(request.body.read)
-      raise if response["url"].nil? || !is_valid(response)
+      raise if response["url"].nil?  || !contains_legal_chars(response)  || !valid_url?(response)
       response
     rescue
         halt 400, {message: 'Invalid JSON'}.to_json
     end
   end
 
-  def is_valid response
+  def contains_legal_chars response
     /^([!#$&-;=?-_a-z~\[\]]|%[0-9a-fA-F]{2})+$/.match(response.values.join)
   end
+
+  def valid_url? response
+    uri = URI.parse(response["url"])
+    %w( http https ).include?(uri.scheme)
+    rescue URI::BadURIError
+      false
+    rescue URI::InvalidURIError
+      false
+  end
+
 end
 
