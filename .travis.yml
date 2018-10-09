@@ -9,4 +9,4 @@ language: ruby
 rvm:
 - 2.5.0
 script:
-- docker-compose up
+- docker-compose -f docker-compose.rspec.yml up

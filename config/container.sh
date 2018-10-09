@@ -8,5 +8,5 @@ elif [ "$ENTRYPOINT" = "test" ]
 then
   bundle exec rake db:migrate
   bundle exec rspec spec
-  exit 
+  exit 0 
 fi
