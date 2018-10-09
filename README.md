@@ -1,3 +1,6 @@
+[![Maintainability](https://api.codeclimate.com/v1/badges/e2df624d0d571d0de5e1/maintainability)](https://codeclimate.com/github/sizief/slinky/maintainability)  
+  
+
 ### A simple url shortner
   Slinky is a super simple url shortner written in `Ruby` with the help of `docker`, `Postgres`, `Sinatra` and `Rspec`   
   
