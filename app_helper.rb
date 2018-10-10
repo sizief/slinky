@@ -1,11 +1,24 @@
 helpers do
   def status_of url
     if url.errors.messages.empty?
-      return 201
+      return {
+              status: 201, 
+              message: {shortcode: url.shortcode}
+      }
     elsif url.errors.messages.values.first.first == "not_unique"
-      return 409
+      return {
+              status: 409, 
+              message: {message: "shortcode already taken, try again without sending shortcode, we will pick one for you :-)"}             }
     elsif url.errors.messages.values.first.first == "condition_failed"
-      return 422
+      return {
+              status: 422,  
+              message: {message: "The shortcode should contains only A-Z or 0-9 and underline, and it should be six characters."}
+             }
+    else
+      return {
+              status: 500,
+              message: {message: "unkown error"}
+             }
     end
   end
 

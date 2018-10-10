@@ -5,9 +5,6 @@ require './models/url'
 require './models/stat'
 require './app_helper.rb'
 
-#set :environment, :test
-#set :RACK_ENV, :production
-#set :server, :puma
 set :bind, '0.0.0.0'
 
 before do
@@ -19,22 +16,11 @@ get '/all' do
 end
 
 post '/shorten' do
-  url = Url.new(json_params)
-  url.save
-  
-  case status_of url
-    when 201   
-      status 201
-      {shortcode: url.shortcode}.to_json
-    when 409
-      status 409
-      {message: "shortcode already taken, try again without sending shortcode, we will pick one for you :-)"}.to_json
-    when 422
-      status 422
-      {message: "The shortcode should contains only A-Z or 0-9 and underline, and it should be six characters."}.to_json
-    else
-      status 404  
-  end
+  requested_url = Url.new(json_params)
+  requested_url.save
+  url = status_of requested_url
+  status url[:status]
+  url[:message].to_json
 end
 
 get '/*/stats' do
@@ -56,3 +42,4 @@ get '/*' do
     redirect to("#{url.url}"), 301
   end
 end
+
