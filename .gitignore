@@ -18,7 +18,7 @@ db/test
 
 !/log/.keep
 !/tmp/.keep
-
+*.DS_Store
 # Ignore Byebug command history file.
 .byebug_history
 
